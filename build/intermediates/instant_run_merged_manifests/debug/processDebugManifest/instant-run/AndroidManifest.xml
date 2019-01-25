@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="15"
+        android:minSdkVersion="22"
         android:targetSdkVersion="27" />
 
     <application
@@ -25,8 +25,17 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.verri.projetomobile.AddGastoActivity" />
-        <activity android:name="com.example.verri.projetomobile.ListarGastosActivity" />
         <activity android:name="com.example.verri.projetomobile.GastosActivity" />
+        <activity android:name="com.example.verri.projetomobile.MetaActivity" />
+
+        <receiver
+            android:name="com.example.verri.projetomobile.TelaDesbloqueadaReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="com.android.tools.ir.server.InstantRunContentProvider"

@@ -18,8 +18,12 @@ class BancoHelper(context: Context):
                 " nome text," +
                 " preco real," +
                 " gastoId integer)"
+        val sql3 = "create table if not exists gastoMaximo(" +
+                "id integer primary key autoincrement," +
+                " preco real)"
         db?.execSQL(sql1)
         db?.execSQL(sql2)
+        db?.execSQL(sql3)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

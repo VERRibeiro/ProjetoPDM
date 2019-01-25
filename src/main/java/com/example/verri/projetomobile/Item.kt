@@ -25,6 +25,6 @@ class Item: Serializable {
     }
 
     override fun toString(): String {
-        return "${this.gastoId}: ${this.nome} - ${this.preco} (${this.tempoStr()})"
+        return " ${this.nome}   -   ${this.preco}"
     }
 }

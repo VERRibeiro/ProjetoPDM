@@ -32,7 +32,8 @@ class AddGastoActivity : AppCompatActivity() {
         this.btAdicionarItem = findViewById(R.id.btAdicionarItem)
         this.lista = findViewById(R.id.lvProdutos)
         this.lista.adapter = ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, this.itemDao.read(gastoId))
-        this.itemDao.read().forEach{total += it.preco}
+        this.itemDao.read(gastoId).forEach{total += it.preco}
+        tvItemValor.text = total.toString()
         this.btAdicionarItem.setOnClickListener({salvar(it)})
         this.btFinalizarGasto.setOnClickListener({finalizar(it)})
         this.lista.setOnItemLongClickListener { parent, view, position, id ->
@@ -56,13 +57,15 @@ class AddGastoActivity : AppCompatActivity() {
         adapter.clear()
         adapter.addAll(this.itemDao.read(gastoId))
         total = 0.0
-        this.itemDao.read().forEach{total = total +it.preco}
+        this.itemDao.read(gastoId).forEach{total = total +it.preco}
         tvItemValor.setText(total.toString() +" $")
     }
     private fun salvar(view: View){
         val item = Item()
         val nome = this.etNomeItemAdd.text.toString()
         val valor = this.etValorItemAdd.text.toString().toDouble()
+        this.etNomeItemAdd.setText("")
+        this.etValorItemAdd.setText("")
         item.nome = nome
         item.preco = valor
         item.gastoId = gastoId

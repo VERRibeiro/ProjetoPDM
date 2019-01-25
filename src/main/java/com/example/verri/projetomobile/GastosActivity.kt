@@ -27,34 +27,31 @@ class GastosActivity : AppCompatActivity() {
         setContentView(R.layout.activity_gastos)
 
         btCadastrarGastos = findViewById(R.id.btCadastrarGasto)
-        btVoltar = findViewById(R.id.btVoltar)
+        btVoltar = findViewById(R.id.btVoltarGasto)
         this.tvValorGasto = findViewById(R.id.tvValorGasto)
         this.gastoDao = GastoDAO(this)
         this.itemDao = ItemDAO(this)
         this.lista = findViewById(R.id.lvGastos)
-        this.lista.adapter = ArrayAdapter<Gasto>(this, android.R.layout.simple_list_item_1, this.gastoDao.read())
-        this.gastoDao.read().forEach{total += it.preco}
-        tvValorGasto.setText(total.toString())
+        this.lista.adapter = GastoAdapter(this)
+
+        if (this.gastoDao.read().size > 0){
+            this.gastoDao.read().forEach{total += it.preco}
+        }
+        tvValorGasto.setText("Gastos: "+total.toString() + " $")
         btCadastrarGastos.setOnClickListener {
             intent = Intent(this, AddGastoActivity::class.java)
             intent.putExtra("GASTOID", gastoDao.size())
             startActivityForResult(intent, ADD)
         }
-        this.lista.setOnItemLongClickListener { parent, view, position, id ->
-            val gasto = this.lista.adapter.getItem(position) as Gasto
-            this.gastoDao.delete(gasto.id)
-            total -= gasto.preco
-            this.itemDao.read(gasto.id).forEach{ Log.i("DALE", it.id.toString())}
-            tvValorGasto.setText(total.toString())
-            atualiza()
-            true
-        }
         this.lista.setOnItemClickListener { parent, view, position, id ->
             val gasto = this.lista.adapter.getItem(position) as Gasto
-            intent = Intent(this, AddGastoActivity::class.java)
-            intent.putExtra("GASTOID", gasto.id)
+            val intent = Intent(this, AddGastoActivity::class.java)
+            intent.putExtra("GASTOID", gasto.id - 1)
             startActivityForResult(intent, EDIT)
             true
+        }
+        btVoltar.setOnClickListener{
+            finish()
         }
     }
 
@@ -70,10 +67,8 @@ class GastosActivity : AppCompatActivity() {
         //(this.lista.adapter as ArrayAdapter<Amigo>).notifyDataSetChanged()
         total = 0.0
         this.gastoDao.read().forEach{total += it.preco}
-        tvValorGasto.text = total.toString() + " $"
-        val adapter = this.lista.adapter as ArrayAdapter<Gasto>
-        adapter.clear()
-        adapter.addAll(this.gastoDao.read())
+        tvValorGasto.text = "Gastos: "+total.toString() + " $"
+        this.lista.adapter = GastoAdapter(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

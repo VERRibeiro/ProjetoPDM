@@ -9,7 +9,6 @@ class Gasto: Serializable{
     var nome: String
     var preco : Double
     var tempo: Calendar
-    val lista = ArrayList<Item>()
 
     constructor(){
         this.id = -1
